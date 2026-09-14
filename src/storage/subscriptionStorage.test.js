@@ -1,0 +1,45 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { loadSubscriptions, saveSubscriptions, loadEvents, saveEvents } from './subscriptionStorage.js'
+
+function fakeStorage() {
+  const store = new Map()
+  return {
+    async getItem(key) {
+      return store.has(key) ? store.get(key) : null
+    },
+    async setItem(key, value) {
+      store.set(key, value)
+    },
+  }
+}
+
+test('loadSubscriptions returns an empty array when nothing is stored', async () => {
+  const storage = fakeStorage()
+  assert.deepStrictEqual(await loadSubscriptions(storage), [])
+})
+
+test('saveSubscriptions then loadSubscriptions round-trips the data', async () => {
+  const storage = fakeStorage()
+  const items = [{ id: '1', name: 'Figma', monthlyCost: 15000, decision: 'keep' }]
+  await saveSubscriptions(storage, items)
+  assert.deepStrictEqual(await loadSubscriptions(storage), items)
+})
+
+test('loadSubscriptions returns an empty array when stored value is corrupt JSON', async () => {
+  const storage = fakeStorage()
+  await storage.setItem('renewly-subscriptions', '{not-json')
+  assert.deepStrictEqual(await loadSubscriptions(storage), [])
+})
+
+test('loadEvents returns an empty array when nothing is stored', async () => {
+  const storage = fakeStorage()
+  assert.deepStrictEqual(await loadEvents(storage), [])
+})
+
+test('saveEvents then loadEvents round-trips the data', async () => {
+  const storage = fakeStorage()
+  const events = [{ id: 'a', text: '새 구독 Spotify가 등록됐어요', at: '2026-09-10T00:00:00.000Z' }]
+  await saveEvents(storage, events)
+  assert.deepStrictEqual(await loadEvents(storage), events)
+})
