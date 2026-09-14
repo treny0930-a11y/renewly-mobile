@@ -1,13 +1,14 @@
 {
   "expo": {
-    "name": "renewly-mobile",
+    "name": "Renewly",
     "slug": "renewly-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.treny0930.renewly"
     },
     "android": {
       "adaptiveIcon": {
