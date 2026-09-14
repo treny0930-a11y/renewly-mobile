@@ -23,3 +23,5 @@ jobs:
         run: node --test src/domain/subscription.test.js src/storage/subscriptionStorage.test.js src/theme.test.js
       - name: Lint
         run: npx expo lint
+      - name: Verify iOS bundle
+        run: npx expo export --platform ios

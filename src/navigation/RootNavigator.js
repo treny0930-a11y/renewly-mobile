@@ -28,7 +28,7 @@ export default function RootNavigator() {
             headerShown: false,
             tabBarActiveTintColor: colors.accent,
             tabBarInactiveTintColor: colors.inkSecondary,
-            tabBarIcon: () => <Text style={{ fontSize: 18 }}>{tab.icon}</Text>,
+            tabBarIcon: ({ color }) => <Text style={{ fontSize: 18, color }}>{tab.icon}</Text>,
             tabBarLabel: tab.label,
           }
         }}
