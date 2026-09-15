@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { colors } from '../theme.js'
 
-export default function Time({ item }) {
+export default function Time({ item, monthLabel }) {
   return (
     <View style={styles.time}>
-      <Text style={styles.month}>9월</Text>
+      <Text style={styles.month}>{monthLabel}</Text>
       <Text style={styles.day}>{item.billingDay}일</Text>
     </View>
   )

@@ -81,10 +81,12 @@ export default function CalendarScreen() {
         <Text style={styles.scheduleSub}>결제일 순으로 정리했어요</Text>
         {items.length === 0 ? (
           <EmptyState text="등록된 결제 일정이 없어요." />
+        ) : upcoming.length === 0 ? (
+          <EmptyState text="이번 달 예정된 결제가 없어요." />
         ) : upcoming.map((x) => (
           <View key={x.id} style={styles.rowWithAction}>
             <Pressable style={styles.scheduleRow} onPress={() => open(x.id)}>
-              <Time item={x} />
+              <Time item={x} monthLabel={`${grid.month + 1}월`} />
               <Icon item={x} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.scheduleName}>{x.name}</Text>

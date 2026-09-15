@@ -9,7 +9,7 @@ const STYLE = {
 }
 
 export default function Status({ item }) {
-  const [label, key] = copy[item.decision]
+  const [label, key] = copy[item.decision] || copy.review
   return (
     <View style={[styles.badge, { backgroundColor: STYLE[key].backgroundColor }]}>
       <Text style={[styles.label, { color: STYLE[key].color }]}>{label}</Text>

@@ -1,6 +1,6 @@
 import { Text, StyleSheet } from 'react-native'
 import { useSubscriptions } from '../context/SubscriptionsContext.js'
-import { colors, spacing, radius } from '../theme.js'
+import { spacing, radius } from '../theme.js'
 
 export default function Toast() {
   const { toast } = useSubscriptions()

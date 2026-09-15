@@ -43,7 +43,7 @@ export default function HomeScreen() {
 
   return (
     <Page
-      eyebrow="2026년 9월"
+      eyebrow={`${now.getFullYear()}년 ${now.getMonth() + 1}월`}
       title="안녕하세요, 건호님 👋"
       sub="이번 달 구독 현황이에요"
       right={<Pressable style={styles.addButton} onPress={goAdd}><Text style={styles.addButtonText}>＋ 새 구독 등록</Text></Pressable>}
@@ -74,7 +74,7 @@ export default function HomeScreen() {
           ? <EmptyState text="등록하면 결제일을 여기서 확인할 수 있어요." />
           : upcoming.map((x) => (
             <Pressable key={x.id} style={styles.upcomingRow} onPress={() => open(x.id)}>
-              <Time item={x} />
+              <Time item={x} monthLabel={`${now.getMonth() + 1}월`} />
               <Icon item={x} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.upcomingName}>{x.name}</Text>

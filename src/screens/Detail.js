@@ -87,7 +87,7 @@ export default function DetailScreen() {
 
       <View style={styles.recommend}>
         <Text style={styles.recommendKicker}>✦ 평가 결과</Text>
-        <Text style={styles.recommendTitle}>{SHORT_LABEL[result.recommendation]}를 제안해요</Text>
+        <Text style={styles.recommendTitle}>{SHORT_LABEL[result.recommendation] || '검토'}를 제안해요</Text>
         <Text style={styles.recommendReason}>{result.reason}</Text>
         <View style={styles.recommendButtons}>
           {['keep', 'review', 'cancel'].map((x) => (

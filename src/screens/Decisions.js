@@ -58,7 +58,7 @@ function InsightCard({ item, action }) {
       <View style={styles.insightFooter}>
         {isCancel
           ? <Text style={styles.insightSave}>해지 시 연 {won(item.monthlyCost * 12)} 절약</Text>
-          : <Text style={[styles.status, statusColor]}>{copy[item.decision][0]}</Text>}
+          : <Text style={[styles.status, statusColor]}>{(copy[item.decision] || copy.review)[0]}</Text>}
         <Pressable style={styles.insightCta} onPress={action}><Text style={styles.insightCtaText}>{isCancel ? '해지 검토' : '비교'}</Text></Pressable>
       </View>
     </View>
@@ -138,7 +138,7 @@ export default function DecisionsScreen() {
             return (
               <View key={key} style={styles.group}>
                 <View style={styles.groupHead}>
-                  <Text style={[styles.status, STATUS_STYLE[key]]}>{copy[key][0]}</Text>
+                  <Text style={[styles.status, STATUS_STYLE[key]]}>{(copy[key] || copy.review)[0]}</Text>
                   <Text style={styles.groupCount}>{group.length}</Text>
                 </View>
                 {group.length ? group.map((x) => (
