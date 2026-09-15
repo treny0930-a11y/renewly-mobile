@@ -1,17 +1,59 @@
-import { View, Text, StyleSheet } from 'react-native'
-import { colors, spacing } from '../theme.js'
+import { useState } from 'react'
+import { View, Text, Switch, Pressable, StyleSheet } from 'react-native'
+import Page from '../components/Page.js'
+import ChipRow from '../components/ChipRow.js'
+import { colors, spacing, radius } from '../theme.js'
+import { useSubscriptions } from '../context/SubscriptionsContext.js'
+
+const REMINDER_OPTIONS = [3, 7, 14].map((x) => ({ key: x, label: `${x}일 전` }))
 
 export default function SettingsScreen() {
+  const { notify } = useSubscriptions()
+  const [on, setOn] = useState(true)
+  const [days, setDays] = useState(7)
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>설정</Text>
-      <Text style={styles.body}>Plan B에서 실제 화면으로 교체됩니다.</Text>
-    </View>
+    <Page eyebrow="앱 설정" title="알림 설정" sub="결제일을 놓치지 않게 앱에서 알려드려요">
+      <View style={styles.section}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.sectionTitle}>결제일 알림</Text>
+          <Text style={styles.sectionSub}>결제 예정 구독을 홈 화면에서 알려드려요</Text>
+        </View>
+        <Switch value={on} onValueChange={setOn} trackColor={{ true: colors.accent }} />
+      </View>
+
+      <View style={styles.sectionVertical}>
+        <Text style={styles.sectionTitle}>미리 알림</Text>
+        <Text style={styles.sectionSub}>결제일 며칠 전에 확인할까요?</Text>
+        <View style={{ marginTop: spacing.md }}>
+          <ChipRow options={REMINDER_OPTIONS} value={days} onChange={setDays} />
+        </View>
+      </View>
+
+      <View style={styles.local}>
+        <Text style={styles.localIcon}>✦</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.localTitle}>내 데이터는 이렇게 저장돼요</Text>
+          <Text style={styles.localText}>로그인 없이 이 기기 브라우저에만 저장돼요. 서버로 보내지 않고, 다른 기기·브라우저에서는 다시 보이지 않아요.</Text>
+        </View>
+      </View>
+
+      <Pressable style={styles.saveButton} onPress={() => notify('설정이 저장되었어요.')}>
+        <Text style={styles.saveButtonText}>설정 저장</Text>
+      </Pressable>
+    </Page>
   )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg, padding: spacing.xl, justifyContent: 'center', alignItems: 'center' },
-  title: { fontSize: 24, fontWeight: '700', color: colors.ink, marginBottom: spacing.sm },
-  body: { fontSize: 14, color: colors.inkSecondary, textAlign: 'center' },
+  section: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: radius.card, padding: spacing.lg, marginBottom: spacing.md },
+  sectionVertical: { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: radius.card, padding: spacing.lg, marginBottom: spacing.md },
+  sectionTitle: { fontSize: 14, fontWeight: '600', color: colors.ink },
+  sectionSub: { fontSize: 12, color: colors.inkSecondary, marginTop: 2 },
+  local: { flexDirection: 'row', gap: spacing.sm, backgroundColor: colors.accentSoft, borderRadius: 12, padding: spacing.lg, marginVertical: spacing.md },
+  localIcon: { fontSize: 16, color: colors.accent },
+  localTitle: { fontSize: 13, fontWeight: '600', color: colors.accent, marginBottom: 3 },
+  localText: { fontSize: 12, color: 'rgba(79,70,229,0.85)', lineHeight: 18 },
+  saveButton: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.md, alignItems: 'center', marginTop: spacing.md },
+  saveButtonText: { color: '#fff', fontWeight: '700', fontSize: 14 },
 })
