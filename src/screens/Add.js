@@ -21,7 +21,7 @@ export default function AddScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
       <Pressable onPress={() => navigation.goBack()}><Text style={styles.back}>‹ 뒤로</Text></Pressable>
       <Text style={styles.eyebrow}>새 구독</Text>
       <Text style={styles.title}>구독 등록하기</Text>

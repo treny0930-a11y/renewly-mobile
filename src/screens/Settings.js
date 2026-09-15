@@ -34,7 +34,7 @@ export default function SettingsScreen() {
         <Text style={styles.localIcon}>✦</Text>
         <View style={{ flex: 1 }}>
           <Text style={styles.localTitle}>내 데이터는 이렇게 저장돼요</Text>
-          <Text style={styles.localText}>로그인 없이 이 기기 브라우저에만 저장돼요. 서버로 보내지 않고, 다른 기기·브라우저에서는 다시 보이지 않아요.</Text>
+          <Text style={styles.localText}>로그인 없이 이 기기에만 저장돼요. 서버로 보내지 않고, 다른 기기에서는 다시 보이지 않아요. 앱을 삭제하면 데이터도 함께 사라져요.</Text>
         </View>
       </View>
 
