@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { loadSubscriptions, saveSubscriptions, loadEvents, saveEvents } from './subscriptionStorage.js'
+import { loadSubscriptions, saveSubscriptions, loadEvents, saveEvents, loadOnboarded, saveOnboarded } from './subscriptionStorage.js'
 
 function fakeStorage() {
   const store = new Map()
@@ -42,4 +42,22 @@ test('saveEvents then loadEvents round-trips the data', async () => {
   const events = [{ id: 'a', text: '새 구독 Spotify가 등록됐어요', at: '2026-09-10T00:00:00.000Z' }]
   await saveEvents(storage, events)
   assert.deepStrictEqual(await loadEvents(storage), events)
+})
+
+test('loadOnboarded returns false when nothing is stored', async () => {
+  const storage = fakeStorage()
+  assert.strictEqual(await loadOnboarded(storage), false)
+})
+
+test('saveOnboarded then loadOnboarded round-trips true', async () => {
+  const storage = fakeStorage()
+  await saveOnboarded(storage, true)
+  assert.strictEqual(await loadOnboarded(storage), true)
+})
+
+test('saveOnboarded then loadOnboarded round-trips false', async () => {
+  const storage = fakeStorage()
+  await saveOnboarded(storage, true)
+  await saveOnboarded(storage, false)
+  assert.strictEqual(await loadOnboarded(storage), false)
 })
