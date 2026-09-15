@@ -14,7 +14,12 @@ import { useSubscriptions } from '../context/SubscriptionsContext.js'
 const MIN_CURSOR = 2020 * 12
 const MAX_CURSOR = 2030 * 12 + 11
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
-const CELL_SIZE = `${100 / 7}%`
+
+function chunkIntoWeeks(cells) {
+  const weeks = []
+  for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7))
+  return weeks
+}
 
 export default function CalendarScreen() {
   const navigation = useNavigation()
@@ -51,20 +56,24 @@ export default function CalendarScreen() {
 
       <View style={styles.weekRow}>{WEEKDAYS.map((x) => <Text key={x} style={styles.weekLabel}>{x}</Text>)}</View>
       <View style={styles.daysGrid}>
-        {grid.cells.map(({ day: cellDay }, index) => {
-          const hit = items.find((x) => x.billingDay === cellDay)
-          const isToday = cellDay === today && isCurrentMonth
-          return (
-            <View key={index} style={[styles.dayCell, isToday && styles.dayCellToday]}>
-              {cellDay ? (
-                <>
-                  <Text style={[styles.dayNumber, isToday && styles.dayNumberToday]}>{cellDay}</Text>
-                  {hit && <View style={[styles.dot, { backgroundColor: isToday ? '#fff' : hit.color }]} />}
-                </>
-              ) : null}
-            </View>
-          )
-        })}
+        {chunkIntoWeeks(grid.cells).map((week, w) => (
+          <View key={w} style={styles.weekCells}>
+            {week.map(({ day: cellDay }, i) => {
+              const hit = items.find((x) => x.billingDay === cellDay)
+              const isToday = cellDay === today && isCurrentMonth
+              return (
+                <View key={w * 7 + i} style={[styles.dayCell, isToday && styles.dayCellToday]}>
+                  {cellDay ? (
+                    <>
+                      <Text style={[styles.dayNumber, isToday && styles.dayNumberToday]}>{cellDay}</Text>
+                      {hit && <View style={[styles.dot, { backgroundColor: isToday ? '#fff' : hit.color }]} />}
+                    </>
+                  ) : null}
+                </View>
+              )
+            })}
+          </View>
+        ))}
       </View>
 
       <View style={styles.schedule}>
@@ -134,9 +143,10 @@ const styles = StyleSheet.create({
   navArrowDisabled: { color: colors.border },
   navLabel: { fontSize: 14, fontWeight: '600', color: colors.ink },
   weekRow: { flexDirection: 'row' },
-  weekLabel: { width: CELL_SIZE, textAlign: 'center', fontSize: 11, color: '#A0A0A8', paddingBottom: spacing.sm },
-  daysGrid: { flexDirection: 'row', flexWrap: 'wrap' },
-  dayCell: { width: CELL_SIZE, height: 44, borderRadius: 10, alignItems: 'center', justifyContent: 'center', gap: 3 },
+  weekLabel: { flex: 1, textAlign: 'center', fontSize: 11, color: '#A0A0A8', paddingBottom: spacing.sm },
+  daysGrid: {},
+  weekCells: { flexDirection: 'row' },
+  dayCell: { flex: 1, height: 44, borderRadius: 10, alignItems: 'center', justifyContent: 'center', gap: 3 },
   dayCellToday: { backgroundColor: colors.accent },
   dayNumber: { fontSize: 13, color: colors.ink },
   dayNumberToday: { color: '#fff', fontWeight: '600' },

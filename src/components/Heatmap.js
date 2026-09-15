@@ -19,7 +19,11 @@ function compact(n) {
   return n >= 10000 ? `${(n / 10000).toFixed(n % 10000 === 0 ? 0 : 1)}만` : won(n)
 }
 
-const CELL_SIZE = `${100 / 7}%`
+function chunkIntoWeeks(cells) {
+  const weeks = []
+  for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7))
+  return weeks
+}
 
 export default function Heatmap({ items }) {
   const now = new Date()
@@ -39,19 +43,24 @@ export default function Heatmap({ items }) {
         {['일', '월', '화', '수', '목', '금', '토'].map((x) => <Text key={x} style={styles.weekLabel}>{x}</Text>)}
       </View>
       <View style={styles.grid}>
-        {grid.cells.map(({ day }, index) => {
-          if (!day) return <View key={index} style={styles.cellEmpty} />
-          const total = totalByDay[day] || 0
-          const lvl = level(total, max)
-          const isToday = day === today
-          return (
-            <View key={index} style={[styles.cell, { backgroundColor: LEVEL_BG[lvl] }, isToday && styles.cellToday]}>
-              <Text style={[styles.cellDay, { color: LEVEL_TEXT[lvl] }]}>{day}</Text>
-              {total > 0 && <Text style={[styles.cellTotal, { color: LEVEL_TEXT[lvl] }]}>{compact(total)}</Text>}
-              {isToday && <Text style={styles.cellTodayLabel}>오늘</Text>}
-            </View>
-          )
-        })}
+        {chunkIntoWeeks(grid.cells).map((week, w) => (
+          <View key={w} style={styles.weekCells}>
+            {week.map(({ day }, i) => {
+              const index = w * 7 + i
+              if (!day) return <View key={index} style={styles.cellEmpty} />
+              const total = totalByDay[day] || 0
+              const lvl = level(total, max)
+              const isToday = day === today
+              return (
+                <View key={index} style={[styles.cell, { backgroundColor: LEVEL_BG[lvl] }, isToday && styles.cellToday]}>
+                  <Text style={[styles.cellDay, { color: LEVEL_TEXT[lvl] }]}>{day}</Text>
+                  {total > 0 && <Text style={[styles.cellTotal, { color: LEVEL_TEXT[lvl] }]}>{compact(total)}</Text>}
+                  {isToday && <Text style={styles.cellTodayLabel}>오늘</Text>}
+                </View>
+              )
+            })}
+          </View>
+        ))}
       </View>
       <View style={styles.legend}>
         <Text style={styles.legendLabel}>적음</Text>
@@ -68,10 +77,11 @@ const styles = StyleSheet.create({
   headTitle: { fontSize: 14, fontWeight: '700', color: colors.ink },
   headSub: { fontSize: 11, color: colors.inkSecondary },
   weekRow: { flexDirection: 'row', marginTop: spacing.md },
-  weekLabel: { width: CELL_SIZE, textAlign: 'center', fontSize: 11, color: colors.inkSecondary },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', marginTop: spacing.xs },
-  cell: { width: CELL_SIZE, height: 46, padding: 5, borderRadius: 8, justifyContent: 'space-between' },
-  cellEmpty: { width: CELL_SIZE, height: 46 },
+  weekLabel: { flex: 1, textAlign: 'center', fontSize: 11, color: colors.inkSecondary },
+  grid: { marginTop: spacing.xs },
+  weekCells: { flexDirection: 'row' },
+  cell: { flex: 1, height: 46, padding: 5, borderRadius: 8, justifyContent: 'space-between' },
+  cellEmpty: { flex: 1, height: 46 },
   cellToday: { borderWidth: 2, borderColor: colors.ink },
   cellDay: { fontSize: 9 },
   cellTotal: { fontSize: 9, fontWeight: '600' },
