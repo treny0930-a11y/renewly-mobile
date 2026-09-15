@@ -3,7 +3,7 @@ import { View, Text, Pressable, Alert, ScrollView, StyleSheet } from 'react-nati
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ChipRow from '../components/ChipRow.js'
-import { colors, spacing, radius } from '../theme.js'
+import { colors, spacing, radius, hitSlop } from '../theme.js'
 import { won } from '../utils/format.js'
 import { getRecommendationDetails, getReviewStaleness } from '../domain/subscription.js'
 import { useSubscriptions } from '../context/SubscriptionsContext.js'
@@ -67,7 +67,7 @@ export default function DetailScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingTop: spacing.xl + insets.top, paddingBottom: spacing.xxl * 2 + insets.bottom }]}>
-      <Pressable onPress={() => navigation.goBack()}><Text style={styles.back}>‹ 뒤로</Text></Pressable>
+      <Pressable onPress={() => navigation.goBack()} hitSlop={hitSlop}><Text style={styles.back}>‹ 뒤로</Text></Pressable>
       <Text style={styles.eyebrow}>{form.category}</Text>
       <Text style={styles.title}>{form.name}</Text>
       <Text style={styles.sub}>매월 {won(form.monthlyCost)} · 매월 {form.billingDay}일 결제</Text>
@@ -98,7 +98,7 @@ export default function DetailScreen() {
         </View>
       </View>
 
-      <Pressable onPress={confirmDelete}><Text style={styles.delete}>이 구독 삭제하기</Text></Pressable>
+      <Pressable onPress={confirmDelete} hitSlop={hitSlop}><Text style={styles.delete}>이 구독 삭제하기</Text></Pressable>
     </ScrollView>
   )
 }
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   missing: { flex: 1, backgroundColor: colors.bg, padding: spacing.xl, justifyContent: 'center', alignItems: 'center' },
   missingTitle: { fontSize: 20, fontWeight: '700', color: colors.ink, marginBottom: spacing.sm },
   missingSub: { fontSize: 13, color: colors.inkSecondary, marginBottom: spacing.lg },
-  primaryButton: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.md, paddingHorizontal: spacing.lg },
+  primaryButton: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.lg, paddingHorizontal: spacing.lg, minHeight: 48, justifyContent: 'center' },
   primaryButtonText: { color: '#fff', fontWeight: '700' },
   back: { color: colors.inkSecondary, fontSize: 13, marginBottom: spacing.lg },
   eyebrow: { fontSize: 13, fontWeight: '600', color: colors.accent },
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   recommendTitle: { fontSize: 16, color: colors.ink, fontWeight: '700', marginTop: 2 },
   recommendReason: { fontSize: 12, color: 'rgba(79,70,229,0.85)', marginTop: spacing.xs },
   recommendButtons: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
-  recommendButton: { flex: 1, borderWidth: 1, borderColor: '#C7C9F0', backgroundColor: colors.card, borderRadius: 10, paddingVertical: spacing.md, alignItems: 'center' },
+  recommendButton: { flex: 1, borderWidth: 1, borderColor: '#C7C9F0', backgroundColor: colors.card, borderRadius: 10, paddingVertical: spacing.lg, alignItems: 'center', justifyContent: 'center', minHeight: 48 },
   recommendButtonSelected: { backgroundColor: colors.accent, borderColor: colors.accent },
   recommendButtonText: { fontSize: 13, fontWeight: '600', color: colors.accent },
   recommendButtonTextSelected: { color: '#fff' },

@@ -31,6 +31,6 @@ export default function BillingEditScreen() {
 
 const styles = StyleSheet.create({
   cost: { fontSize: 13, color: colors.inkSecondary, marginTop: spacing.lg },
-  saveButton: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.md, alignItems: 'center', marginTop: spacing.lg },
+  saveButton: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.lg, alignItems: 'center', justifyContent: 'center', minHeight: 48, marginTop: spacing.lg },
   saveButtonText: { color: '#fff', fontWeight: '700', fontSize: 14 },
 })

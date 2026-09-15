@@ -46,6 +46,6 @@ const styles = StyleSheet.create({
   label: { fontSize: 13, color: colors.inkSecondary, marginTop: spacing.lg, marginBottom: spacing.sm },
   preview: { backgroundColor: colors.accentSoft, borderRadius: 12, padding: spacing.md, marginVertical: spacing.md },
   previewText: { color: colors.accent, fontWeight: '600' },
-  saveButton: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.md, alignItems: 'center', marginTop: spacing.md },
+  saveButton: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.lg, alignItems: 'center', justifyContent: 'center', minHeight: 48, marginTop: spacing.md },
   saveButtonText: { color: '#fff', fontWeight: '700', fontSize: 14 },
 })

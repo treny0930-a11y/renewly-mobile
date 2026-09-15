@@ -20,7 +20,10 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.treny0930.renewly"
+      "bundleIdentifier": "com.treny0930.renewly",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {

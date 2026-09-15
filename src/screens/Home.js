@@ -5,7 +5,7 @@ import Row from '../components/Row.js'
 import Icon from '../components/Icon.js'
 import Time from '../components/Time.js'
 import EmptyState from '../components/EmptyState.js'
-import { colors, spacing } from '../theme.js'
+import { colors, spacing, hitSlop } from '../theme.js'
 import { won } from '../utils/format.js'
 import { needsAttention } from '../domain/subscription.js'
 import { useSubscriptions } from '../context/SubscriptionsContext.js'
@@ -21,7 +21,7 @@ function Panel({ title, count, sub, onSeeAll, children }) {
           </View>
           <Text style={styles.panelSub}>{sub}</Text>
         </View>
-        <Pressable onPress={onSeeAll}><Text style={styles.seeAll}>전체 보기 →</Text></Pressable>
+        <Pressable onPress={onSeeAll} hitSlop={hitSlop}><Text style={styles.seeAll}>전체 보기 →</Text></Pressable>
       </View>
       {children}
     </View>
@@ -89,7 +89,7 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  addButton: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.sm, paddingHorizontal: spacing.md },
+  addButton: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.lg, paddingHorizontal: spacing.md, minHeight: 48, justifyContent: 'center' },
   addButtonText: { color: '#fff', fontWeight: '700', fontSize: 13 },
   hero: { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 15, padding: spacing.xl, marginBottom: spacing.xl },
   heroLabel: { fontSize: 12, color: colors.inkSecondary },

@@ -1,7 +1,7 @@
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { colors, spacing, radius } from '../theme.js'
+import { colors, spacing, radius, hitSlop } from '../theme.js'
 import { won } from '../utils/format.js'
 import { useSubscriptions } from '../context/SubscriptionsContext.js'
 
@@ -13,7 +13,7 @@ export default function CancelSavingsScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingTop: spacing.xl + insets.top, paddingBottom: spacing.xxl * 2 + insets.bottom }]}>
-      <Pressable onPress={() => navigation.goBack()}><Text style={styles.back}>‹ 뒤로</Text></Pressable>
+      <Pressable onPress={() => navigation.goBack()} hitSlop={hitSlop}><Text style={styles.back}>‹ 뒤로</Text></Pressable>
       <Text style={styles.eyebrow}>해지 후보 모아보기</Text>
       <Text style={styles.title}>절감액 계산 상세</Text>
       <Text style={styles.sub}>반영하면 매달 얼마가 남는지 확인해요.</Text>

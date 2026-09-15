@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { colors, radius, spacing } from './theme.js'
+import { colors, radius, spacing, hitSlop } from './theme.js'
 
 test('colors match the design tokens from the Saas-nex-app web CSS variables', () => {
   assert.strictEqual(colors.bg, '#FAFAFA')
@@ -38,4 +38,11 @@ test('extended neutral and heatmap tokens are present for Plan B screens', () =>
   assert.strictEqual(colors.heat2, '#C3C7F5')
   assert.strictEqual(colors.heat3, '#9098EE')
   assert.strictEqual(colors.heat4, '#5B63E3')
+})
+
+test('hitSlop expands compact touch targets toward the ~48px accessibility minimum on every side', () => {
+  assert.strictEqual(hitSlop.top, 14)
+  assert.strictEqual(hitSlop.bottom, 14)
+  assert.strictEqual(hitSlop.left, 14)
+  assert.strictEqual(hitSlop.right, 14)
 })

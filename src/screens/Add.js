@@ -3,7 +3,7 @@ import { TextInput, Pressable, Text, ScrollView, StyleSheet } from 'react-native
 import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ChipRow from '../components/ChipRow.js'
-import { colors, spacing } from '../theme.js'
+import { colors, spacing, hitSlop } from '../theme.js'
 import { useSubscriptions } from '../context/SubscriptionsContext.js'
 
 const CATEGORIES = ['영상 · 엔터테인먼트', '생산성', '디자인 · 업무', '음악', '기타'].map((x) => ({ key: x, label: x }))
@@ -24,7 +24,7 @@ export default function AddScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingTop: spacing.xl + insets.top, paddingBottom: spacing.xxl * 2 + insets.bottom }]} keyboardShouldPersistTaps="handled">
-      <Pressable onPress={() => navigation.goBack()}><Text style={styles.back}>‹ 뒤로</Text></Pressable>
+      <Pressable onPress={() => navigation.goBack()} hitSlop={hitSlop}><Text style={styles.back}>‹ 뒤로</Text></Pressable>
       <Text style={styles.eyebrow}>새 구독</Text>
       <Text style={styles.title}>구독 등록하기</Text>
       <Text style={styles.sub}>입력한 정보는 이 기기에만 저장돼요</Text>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   sub: { fontSize: 13, color: colors.inkSecondary, marginBottom: spacing.sm },
   label: { fontSize: 13, fontWeight: '600', color: colors.ink, marginTop: spacing.sm },
   input: { borderWidth: 1, borderColor: '#E4E4E7', borderRadius: 10, paddingVertical: spacing.md, paddingHorizontal: spacing.md, fontSize: 14, color: colors.ink, backgroundColor: colors.card },
-  submit: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.md, alignItems: 'center', marginTop: spacing.lg },
+  submit: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.lg, alignItems: 'center', justifyContent: 'center', minHeight: 48, marginTop: spacing.lg },
   submitDisabled: { opacity: 0.5 },
   submitText: { color: '#fff', fontWeight: '700', fontSize: 14 },
 })

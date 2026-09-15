@@ -35,3 +35,5 @@ export const spacing = {
   xl: 20,
   xxl: 24,
 }
+
+export const hitSlop = { top: 14, bottom: 14, left: 14, right: 14 }

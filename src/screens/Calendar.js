@@ -6,7 +6,7 @@ import Page from '../components/Page.js'
 import Icon from '../components/Icon.js'
 import Time from '../components/Time.js'
 import EmptyState from '../components/EmptyState.js'
-import { colors, spacing, radius } from '../theme.js'
+import { colors, spacing, radius, hitSlop } from '../theme.js'
 import { won } from '../utils/format.js'
 import { getCalendarGrid } from '../domain/subscription.js'
 import { useSubscriptions } from '../context/SubscriptionsContext.js'
@@ -49,9 +49,9 @@ export default function CalendarScreen() {
   return (
     <Page eyebrow="결제 관리" title={`${grid.month + 1}월 결제 일정`} sub="정기 결제를 놓치지 않게 미리 챙겨요">
       <View style={styles.navCard}>
-        <Pressable disabled={atMin} onPress={prevMonth}><Text style={[styles.navArrow, atMin && styles.navArrowDisabled]}>‹</Text></Pressable>
-        <Pressable onPress={startPicking}><Text style={styles.navLabel}>{grid.year}년 {grid.month + 1}월</Text></Pressable>
-        <Pressable disabled={atMax} onPress={nextMonth}><Text style={[styles.navArrow, atMax && styles.navArrowDisabled]}>›</Text></Pressable>
+        <Pressable disabled={atMin} onPress={prevMonth} hitSlop={hitSlop}><Text style={[styles.navArrow, atMin && styles.navArrowDisabled]}>‹</Text></Pressable>
+        <Pressable onPress={startPicking} hitSlop={hitSlop}><Text style={styles.navLabel}>{grid.year}년 {grid.month + 1}월</Text></Pressable>
+        <Pressable disabled={atMax} onPress={nextMonth} hitSlop={hitSlop}><Text style={[styles.navArrow, atMax && styles.navArrowDisabled]}>›</Text></Pressable>
       </View>
 
       <View style={styles.weekRow}>{WEEKDAYS.map((x) => <Text key={x} style={styles.weekLabel}>{x}</Text>)}</View>
@@ -94,7 +94,7 @@ export default function CalendarScreen() {
               </View>
               <Text style={styles.chevron}>›</Text>
             </Pressable>
-            <Pressable onPress={() => startEdit(x)}><Text style={styles.link}>결제일 수정</Text></Pressable>
+            <Pressable onPress={() => startEdit(x)} hitSlop={hitSlop}><Text style={styles.link}>결제일 수정</Text></Pressable>
           </View>
         ))}
       </View>
@@ -104,14 +104,14 @@ export default function CalendarScreen() {
           <Pressable style={[styles.sheet, { paddingBottom: spacing.xl + insets.bottom }]} onPress={() => {}}>
             <View style={styles.sheetHeader}>
               <Text style={styles.sheetTitle}>날짜 이동</Text>
-              <Pressable onPress={() => setPicking(false)}><Text style={styles.close}>✕</Text></Pressable>
+              <Pressable onPress={() => setPicking(false)} hitSlop={hitSlop}><Text style={styles.close}>✕</Text></Pressable>
             </View>
             <View style={styles.yearRow}>
-              <Pressable disabled={pickYear <= 2020} onPress={() => setPickYear((y) => Math.max(2020, y - 1))}>
+              <Pressable disabled={pickYear <= 2020} onPress={() => setPickYear((y) => Math.max(2020, y - 1))} hitSlop={hitSlop}>
                 <Text style={[styles.navArrow, pickYear <= 2020 && styles.navArrowDisabled]}>‹</Text>
               </Pressable>
               <Text style={styles.yearLabel}>{pickYear}년</Text>
-              <Pressable disabled={pickYear >= 2030} onPress={() => setPickYear((y) => Math.min(2030, y + 1))}>
+              <Pressable disabled={pickYear >= 2030} onPress={() => setPickYear((y) => Math.min(2030, y + 1))} hitSlop={hitSlop}>
                 <Text style={[styles.navArrow, pickYear >= 2030 && styles.navArrowDisabled]}>›</Text>
               </Pressable>
             </View>
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   weekLabel: { flex: 1, textAlign: 'center', fontSize: 11, color: '#A0A0A8', paddingBottom: spacing.sm },
   daysGrid: {},
   weekCells: { flexDirection: 'row' },
-  dayCell: { flex: 1, height: 44, borderRadius: 10, alignItems: 'center', justifyContent: 'center', gap: 3 },
+  dayCell: { flex: 1, height: 48, borderRadius: 10, alignItems: 'center', justifyContent: 'center', gap: 3 },
   dayCellToday: { backgroundColor: colors.accent },
   dayNumber: { fontSize: 13, color: colors.ink },
   dayNumberToday: { color: '#fff', fontWeight: '600' },
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   yearRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.lg, marginBottom: spacing.lg },
   yearLabel: { fontSize: 15, color: colors.ink },
   monthGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  monthCell: { width: '31%', borderWidth: 1, borderColor: colors.border, borderRadius: 10, paddingVertical: spacing.md, alignItems: 'center' },
+  monthCell: { width: '31%', borderWidth: 1, borderColor: colors.border, borderRadius: 10, paddingVertical: spacing.lg, alignItems: 'center', justifyContent: 'center', minHeight: 48 },
   monthCellSelected: { backgroundColor: colors.accentSoft, borderColor: colors.accent },
   monthCellDisabled: { opacity: 0.4 },
   monthCellText: { fontSize: 13, color: colors.ink },

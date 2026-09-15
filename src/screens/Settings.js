@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
   localIcon: { fontSize: 16, color: colors.accent },
   localTitle: { fontSize: 13, fontWeight: '600', color: colors.accent, marginBottom: 3 },
   localText: { fontSize: 12, color: 'rgba(79,70,229,0.85)', lineHeight: 18 },
-  saveButton: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.md, alignItems: 'center', marginTop: spacing.md },
+  saveButton: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.lg, alignItems: 'center', justifyContent: 'center', minHeight: 48, marginTop: spacing.md },
   saveButtonText: { color: '#fff', fontWeight: '700', fontSize: 14 },
 })

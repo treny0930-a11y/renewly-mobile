@@ -17,6 +17,6 @@ export default function EmptyState({ text, cta, onAction }) {
 const styles = StyleSheet.create({
   container: { paddingVertical: spacing.xxl, alignItems: 'center' },
   text: { fontSize: 13, color: colors.inkSecondary, marginBottom: spacing.md },
-  button: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.md, paddingHorizontal: spacing.lg },
+  button: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.lg, paddingHorizontal: spacing.lg, minHeight: 48, justifyContent: 'center' },
   buttonText: { color: '#fff', fontWeight: '700', fontSize: 14 },
 })

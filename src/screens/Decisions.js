@@ -5,7 +5,7 @@ import Row from '../components/Row.js'
 import Icon from '../components/Icon.js'
 import Heatmap from '../components/Heatmap.js'
 import EmptyState from '../components/EmptyState.js'
-import { colors, spacing, radius } from '../theme.js'
+import { colors, spacing, radius, hitSlop } from '../theme.js'
 import { won } from '../utils/format.js'
 import { copy } from '../utils/statusCopy.js'
 import { getReviewStaleness } from '../domain/subscription.js'
@@ -59,7 +59,7 @@ function InsightCard({ item, action }) {
         {isCancel
           ? <Text style={styles.insightSave}>해지 시 연 {won(item.monthlyCost * 12)} 절약</Text>
           : <Text style={[styles.status, statusColor]}>{(copy[item.decision] || copy.review)[0]}</Text>}
-        <Pressable style={styles.insightCta} onPress={action}><Text style={styles.insightCtaText}>{isCancel ? '해지 검토' : '비교'}</Text></Pressable>
+        <Pressable style={styles.insightCta} hitSlop={hitSlop} onPress={action}><Text style={styles.insightCtaText}>{isCancel ? '해지 검토' : '비교'}</Text></Pressable>
       </View>
     </View>
   )
@@ -122,7 +122,7 @@ export default function DecisionsScreen() {
           <Text style={styles.summarySaving}>월 {won(summary.saving)} 절약</Text>
         </View>
       </View>
-      <Pressable onPress={viewSavings}><Text style={styles.link}>절감액 계산 상세 →</Text></Pressable>
+      <Pressable onPress={viewSavings} hitSlop={hitSlop}><Text style={styles.link}>절감액 계산 상세 →</Text></Pressable>
 
       {items.length > 0 && <KpiCard items={items} summary={summary} />}
       {items.length > 0 && <Heatmap items={items} />}
@@ -130,7 +130,7 @@ export default function DecisionsScreen() {
       {items.length > 0 && <WeekSummary items={items} />}
 
       {items.length === 0 ? (
-        <EmptyState text="구독을 등록하면 결정 상태별로 모아볼 수 있어요." />
+        <EmptyState text="구독을 등록하면 결정 상태별로 모아볼 수 있어요." cta="첫 구독 등록하기" onAction={addNew} />
       ) : (
         <View>
           {['cancel', 'review', 'keep'].map((key) => {
@@ -145,7 +145,7 @@ export default function DecisionsScreen() {
                   <View key={x.id}>
                     <View style={styles.rowWithAction}>
                       <View style={{ flex: 1 }}><Row item={x} open={open} /></View>
-                      <Pressable style={styles.pillChange} onPress={() => startEdit(x)}><Text style={styles.pillChangeText}>변경</Text></Pressable>
+                      <Pressable style={styles.pillChange} hitSlop={hitSlop} onPress={() => startEdit(x)}><Text style={styles.pillChangeText}>변경</Text></Pressable>
                     </View>
                     {key === 'review' && (
                       <Text style={getReviewStaleness(x, now) ? styles.staleBadge : styles.lastEvaluated}>{lastEvaluatedLabel(x, now)}</Text>
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   insightDay: { fontSize: 11, color: colors.inkSecondary },
   insightFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderTopWidth: 1, borderTopColor: colors.border, marginTop: spacing.md, paddingTop: spacing.md },
   insightSave: { fontSize: 12, color: colors.keep },
-  insightCta: { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 10, paddingVertical: spacing.sm, paddingHorizontal: spacing.md },
+  insightCta: { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 10, paddingVertical: spacing.lg, paddingHorizontal: spacing.md },
   insightCtaText: { fontSize: 13, fontWeight: '600', color: colors.ink },
   weekCard: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: radius.card, padding: spacing.lg, marginBottom: spacing.lg },
   weekIcon: { width: 36, height: 36, borderRadius: 10, backgroundColor: colors.neutralBg, alignItems: 'center', justifyContent: 'center' },
