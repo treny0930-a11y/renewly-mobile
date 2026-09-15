@@ -2,6 +2,7 @@
   "expo": {
     "name": "Renewly",
     "slug": "renewly-mobile",
+    "owner": "moongeonho",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -30,6 +31,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ca6ab62d-4739-4857-bcfa-e7bbfffd14d8"
+      }
     }
   }
 }
