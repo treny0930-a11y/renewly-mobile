@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { TextInput, Pressable, Text, ScrollView, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ChipRow from '../components/ChipRow.js'
 import { colors, spacing } from '../theme.js'
 import { useSubscriptions } from '../context/SubscriptionsContext.js'
@@ -10,6 +11,7 @@ const DAYS = Array.from({ length: 31 }, (_, i) => ({ key: i + 1, label: `${i + 1
 
 export default function AddScreen() {
   const navigation = useNavigation()
+  const insets = useSafeAreaInsets()
   const { add } = useSubscriptions()
   const [f, setF] = useState({ name: '', category: '기타', monthlyCost: '', billingDay: 1, frequency: 'medium', importance: 'medium', replaceability: 'medium', costBurden: 'medium', decision: 'keep', color: '#6366f1' })
   const change = (k, v) => setF({ ...f, [k]: v })
@@ -21,7 +23,7 @@ export default function AddScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+    <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingTop: spacing.xl + insets.top, paddingBottom: spacing.xxl * 2 + insets.bottom }]} keyboardShouldPersistTaps="handled">
       <Pressable onPress={() => navigation.goBack()}><Text style={styles.back}>‹ 뒤로</Text></Pressable>
       <Text style={styles.eyebrow}>새 구독</Text>
       <Text style={styles.title}>구독 등록하기</Text>

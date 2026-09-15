@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { View, Text, Pressable, Modal, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Page from '../components/Page.js'
 import Icon from '../components/Icon.js'
 import Time from '../components/Time.js'
@@ -18,6 +19,7 @@ const CELL_SIZE = `${100 / 7}%`
 export default function CalendarScreen() {
   const navigation = useNavigation()
   const { items } = useSubscriptions()
+  const insets = useSafeAreaInsets()
   const now = new Date()
   const [cursor, setCursor] = useState(now.getFullYear() * 12 + now.getMonth())
   const viewYear = Math.floor(cursor / 12)
@@ -88,7 +90,7 @@ export default function CalendarScreen() {
 
       <Modal visible={picking} transparent animationType="slide" onRequestClose={() => setPicking(false)}>
         <Pressable style={styles.overlay} onPress={() => setPicking(false)}>
-          <Pressable style={styles.sheet} onPress={() => {}}>
+          <Pressable style={[styles.sheet, { paddingBottom: spacing.xl + insets.bottom }]} onPress={() => {}}>
             <View style={styles.sheetHeader}>
               <Text style={styles.sheetTitle}>날짜 이동</Text>
               <Pressable onPress={() => setPicking(false)}><Text style={styles.close}>✕</Text></Pressable>

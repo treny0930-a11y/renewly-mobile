@@ -1,14 +1,16 @@
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { colors, spacing } from '../theme.js'
 
 export default function BottomSheetScreen({ title, children }) {
   const navigation = useNavigation()
+  const insets = useSafeAreaInsets()
   const close = () => navigation.goBack()
   return (
     <View style={styles.overlay}>
       <Pressable style={StyleSheet.absoluteFill} onPress={close} />
-      <View style={styles.sheet}>
+      <View style={[styles.sheet, { paddingBottom: spacing.xl + insets.bottom }]}>
         <View style={styles.header}>
           <Text style={styles.title}>{title}</Text>
           <Pressable onPress={close}><Text style={styles.close}>✕</Text></Pressable>

@@ -1,9 +1,11 @@
 import { ScrollView, View, Text, StyleSheet } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { colors, spacing } from '../theme.js'
 
 export default function Page({ eyebrow, title, sub, right, children }) {
+  const insets = useSafeAreaInsets()
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingTop: spacing.xl + insets.top }]}>
       {(title || right) && (
         <View style={styles.header}>
           <View style={styles.headerText}>

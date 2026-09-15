@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { View, Text, Pressable, Alert, ScrollView, StyleSheet } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ChipRow from '../components/ChipRow.js'
 import { colors, spacing, radius } from '../theme.js'
 import { won } from '../utils/format.js'
@@ -32,13 +33,14 @@ function Score({ name, help, value, change, options }) {
 export default function DetailScreen() {
   const navigation = useNavigation()
   const route = useRoute()
+  const insets = useSafeAreaInsets()
   const { items, update, remove, notify } = useSubscriptions()
   const original = items.find((x) => x.id === route.params.id)
   const [form, setForm] = useState(original)
 
   if (!original) {
     return (
-      <View style={styles.missing}>
+      <View style={[styles.missing, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
         <Text style={styles.missingTitle}>구독을 찾을 수 없어요.</Text>
         <Text style={styles.missingSub}>삭제되었거나 더 이상 사용할 수 없는 항목입니다.</Text>
         <Pressable style={styles.primaryButton} onPress={() => navigation.navigate('MainTabs', { screen: 'Home' })}>
@@ -64,7 +66,7 @@ export default function DetailScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingTop: spacing.xl + insets.top, paddingBottom: spacing.xxl * 2 + insets.bottom }]}>
       <Pressable onPress={() => navigation.goBack()}><Text style={styles.back}>‹ 뒤로</Text></Pressable>
       <Text style={styles.eyebrow}>{form.category}</Text>
       <Text style={styles.title}>{form.name}</Text>

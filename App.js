@@ -1,3 +1,5 @@
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { StatusBar } from 'expo-status-bar'
 import { SubscriptionsProvider, useSubscriptions } from './src/context/SubscriptionsContext.js'
 import RootNavigator from './src/navigation/RootNavigator.js'
 import Toast from './src/components/Toast.js'
@@ -17,8 +19,11 @@ function Gate() {
 
 export default function App() {
   return (
-    <SubscriptionsProvider>
-      <Gate />
-    </SubscriptionsProvider>
+    <SafeAreaProvider>
+      <StatusBar style="dark" />
+      <SubscriptionsProvider>
+        <Gate />
+      </SubscriptionsProvider>
+    </SafeAreaProvider>
   )
 }

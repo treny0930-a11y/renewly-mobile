@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { View, Text, ScrollView, Pressable, StyleSheet, useWindowDimensions } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { colors, spacing } from '../theme.js'
 
 const PAGES = [
@@ -22,6 +23,7 @@ const PAGES = [
 
 export default function OnboardingScreen({ onDone }) {
   const { width } = useWindowDimensions()
+  const insets = useSafeAreaInsets()
   const scrollRef = useRef(null)
   const [page, setPage] = useState(0)
 
@@ -40,7 +42,7 @@ export default function OnboardingScreen({ onDone }) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
       <ScrollView
         ref={scrollRef}
         horizontal
