@@ -12,6 +12,14 @@ export const colors = {
   reviewBg: '#FFFAEB',
   cancel: '#B42318',
   cancelBg: '#FEF3F2',
+  neutralBg: '#F2F2F3',
+  neutralText: '#71717A',
+  faint: '#A0A0A8',
+  heat0: '#F2F2F3',
+  heat1: '#E4E5FB',
+  heat2: '#C3C7F5',
+  heat3: '#9098EE',
+  heat4: '#5B63E3',
 }
 
 export const radius = {

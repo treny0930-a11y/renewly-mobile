@@ -28,3 +28,14 @@ test('radius and spacing values are numbers usable directly in RN StyleSheet', (
   assert.strictEqual(spacing.xl, 20)
   assert.strictEqual(spacing.xxl, 24)
 })
+
+test('extended neutral and heatmap tokens are present for Plan B screens', () => {
+  assert.strictEqual(colors.neutralBg, '#F2F2F3')
+  assert.strictEqual(colors.neutralText, '#71717A')
+  assert.strictEqual(colors.faint, '#A0A0A8')
+  assert.strictEqual(colors.heat0, '#F2F2F3')
+  assert.strictEqual(colors.heat1, '#E4E5FB')
+  assert.strictEqual(colors.heat2, '#C3C7F5')
+  assert.strictEqual(colors.heat3, '#9098EE')
+  assert.strictEqual(colors.heat4, '#5B63E3')
+})

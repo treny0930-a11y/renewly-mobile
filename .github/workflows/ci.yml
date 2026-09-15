@@ -19,8 +19,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Run domain and storage tests
-        run: node --test src/domain/subscription.test.js src/storage/subscriptionStorage.test.js src/theme.test.js
+      - name: Run tests
+        run: npm test
       - name: Lint
         run: npx expo lint
       - name: Verify iOS bundle
