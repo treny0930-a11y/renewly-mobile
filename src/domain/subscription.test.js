@@ -98,6 +98,23 @@ test('getUpcomingNotifications derives D-7 billing and stale-review entries into
   assert.ok(result['오늘'].some((entry) => entry.sub.includes('Adobe Creative Cloud') && entry.sub.includes('30일')))
 })
 
+test('getUpcomingNotifications respects a custom reminderDays setting', () => {
+  const today = new Date('2026-09-14T00:00:00.000Z')
+  const items = [{ id: 1, name: 'Figma', billingDay: 24, monthlyCost: 15000, decision: 'keep' }] // 10 days out
+  const resultDefault = getUpcomingNotifications(items, [], today)
+  assert.strictEqual(resultDefault['오늘'].length, 0)
+  const resultCustom = getUpcomingNotifications(items, [], today, { reminderDays: 10 })
+  assert.strictEqual(resultCustom['오늘'].length, 1)
+  assert.ok(resultCustom['오늘'][0].text.includes('10일 전'))
+})
+
+test('getUpcomingNotifications suppresses billing reminders when billingAlertsEnabled is false', () => {
+  const today = new Date('2026-09-14T00:00:00.000Z')
+  const items = [{ id: 1, name: 'Figma', billingDay: 21, monthlyCost: 15000, decision: 'keep' }]
+  const result = getUpcomingNotifications(items, [], today, { billingAlertsEnabled: false })
+  assert.strictEqual(result['오늘'].length, 0)
+})
+
 test('getUpcomingNotifications groups past events by age and drops entries older than 14 days', () => {
   const today = new Date('2026-09-14T00:00:00.000Z')
   const events = [

@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { loadSubscriptions, saveSubscriptions, loadEvents, saveEvents, loadOnboarded, saveOnboarded, loadUserName, saveUserName } from './subscriptionStorage.js'
+import { loadSubscriptions, saveSubscriptions, loadEvents, saveEvents, loadOnboarded, saveOnboarded, loadUserName, saveUserName, loadSettings, saveSettings } from './subscriptionStorage.js'
 
 function fakeStorage() {
   const store = new Map()
@@ -71,4 +71,21 @@ test('saveUserName then loadUserName round-trips the name', async () => {
   const storage = fakeStorage()
   await saveUserName(storage, '건호')
   assert.strictEqual(await loadUserName(storage), '건호')
+})
+
+test('loadSettings returns defaults when nothing is stored', async () => {
+  const storage = fakeStorage()
+  assert.deepStrictEqual(await loadSettings(storage), { billingAlertsEnabled: true, reminderDays: 7 })
+})
+
+test('saveSettings then loadSettings round-trips the settings', async () => {
+  const storage = fakeStorage()
+  await saveSettings(storage, { billingAlertsEnabled: false, reminderDays: 14 })
+  assert.deepStrictEqual(await loadSettings(storage), { billingAlertsEnabled: false, reminderDays: 14 })
+})
+
+test('loadSettings returns defaults when stored value is corrupt JSON', async () => {
+  const storage = fakeStorage()
+  await storage.setItem('renewly-settings', '{not-json')
+  assert.deepStrictEqual(await loadSettings(storage), { billingAlertsEnabled: true, reminderDays: 7 })
 })

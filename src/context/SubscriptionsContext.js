@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getSavingsSummary, getUpcomingNotifications } from '../domain/subscription.js'
-import { loadSubscriptions, saveSubscriptions, loadEvents, saveEvents, loadOnboarded, saveOnboarded, loadUserName, saveUserName } from '../storage/subscriptionStorage.js'
+import { loadSubscriptions, saveSubscriptions, loadEvents, saveEvents, loadOnboarded, saveOnboarded, loadUserName, saveUserName, loadSettings, saveSettings } from '../storage/subscriptionStorage.js'
 import { copy } from '../utils/statusCopy.js'
 import { won } from '../utils/format.js'
 
@@ -19,16 +19,18 @@ export function SubscriptionsProvider({ children }) {
   const [events, setEvents] = useState([])
   const [onboarded, setOnboarded] = useState(false)
   const [userName, setUserName] = useState('')
+  const [settings, setSettings] = useState({ billingAlertsEnabled: true, reminderDays: 7 })
   const [toast, setToast] = useState('')
 
   useEffect(() => {
     let cancelled = false
-    Promise.all([loadSubscriptions(AsyncStorage), loadEvents(AsyncStorage), loadOnboarded(AsyncStorage), loadUserName(AsyncStorage)]).then(([loadedItems, loadedEvents, loadedOnboarded, loadedUserName]) => {
+    Promise.all([loadSubscriptions(AsyncStorage), loadEvents(AsyncStorage), loadOnboarded(AsyncStorage), loadUserName(AsyncStorage), loadSettings(AsyncStorage)]).then(([loadedItems, loadedEvents, loadedOnboarded, loadedUserName, loadedSettings]) => {
       if (cancelled) return
       setItems(loadedItems)
       setEvents(loadedEvents)
       setOnboarded(loadedOnboarded)
       setUserName(loadedUserName)
+      setSettings(loadedSettings)
       setReady(true)
     })
     return () => { cancelled = true }
@@ -64,10 +66,14 @@ export function SubscriptionsProvider({ children }) {
     setUserName(name)
     saveUserName(AsyncStorage, name)
   }
+  const updateSettings = (next) => {
+    setSettings(next)
+    saveSettings(AsyncStorage, next)
+  }
 
   const summary = useMemo(() => getSavingsSummary(items), [items])
-  const notifGroups = useMemo(() => getUpcomingNotifications(items, events), [items, events])
+  const notifGroups = useMemo(() => getUpcomingNotifications(items, events, new Date(), settings), [items, events, settings])
 
-  const value = { ready, items, events, onboarded, userName, summary, notifGroups, toast, add, update, remove, changeDecision, editBilling, notify, completeOnboarding }
+  const value = { ready, items, events, onboarded, userName, settings, summary, notifGroups, toast, add, update, remove, changeDecision, editBilling, notify, completeOnboarding, updateSettings }
   return <SubscriptionsContext.Provider value={value}>{children}</SubscriptionsContext.Provider>
 }

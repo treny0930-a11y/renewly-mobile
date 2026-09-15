@@ -76,14 +76,14 @@ function groupForAge(diff) {
   return null
 }
 
-export function getUpcomingNotifications(items, events = [], today = new Date()) {
+export function getUpcomingNotifications(items, events = [], today = new Date(), { reminderDays = 7, billingAlertsEnabled = true } = {}) {
   const derived = []
   for (const item of items) {
-    if (typeof item.billingDay === 'number' && item.billingDay - today.getDate() === 7) {
+    if (billingAlertsEnabled && typeof item.billingDay === 'number' && item.billingDay - today.getDate() === reminderDays) {
       derived.push({
         id: `billing-${item.id}`,
         type: 'billing',
-        text: `${item.name} 결제 7일 전`,
+        text: `${item.name} 결제 ${reminderDays}일 전`,
         sub: `${item.billingDay}일 · ${Number(item.monthlyCost || 0).toLocaleString('ko-KR')}원 결제 예정`,
         at: today.toISOString(),
       })

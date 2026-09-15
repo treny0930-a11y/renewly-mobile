@@ -2,6 +2,8 @@ const SUBSCRIPTIONS_KEY = 'renewly-subscriptions'
 const EVENTS_KEY = 'renewly-events'
 const ONBOARDED_KEY = 'renewly-onboarded'
 const USER_NAME_KEY = 'renewly-user-name'
+const SETTINGS_KEY = 'renewly-settings'
+const DEFAULT_SETTINGS = { billingAlertsEnabled: true, reminderDays: 7 }
 
 export async function loadSubscriptions(storage) {
   try {
@@ -53,4 +55,17 @@ export async function loadUserName(storage) {
 
 export async function saveUserName(storage, name) {
   await storage.setItem(USER_NAME_KEY, name)
+}
+
+export async function loadSettings(storage) {
+  try {
+    const raw = await storage.getItem(SETTINGS_KEY)
+    return raw ? { ...DEFAULT_SETTINGS, ...JSON.parse(raw) } : DEFAULT_SETTINGS
+  } catch {
+    return DEFAULT_SETTINGS
+  }
+}
+
+export async function saveSettings(storage, settings) {
+  await storage.setItem(SETTINGS_KEY, JSON.stringify(settings))
 }

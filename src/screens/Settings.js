@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { View, Text, Switch, Pressable, StyleSheet } from 'react-native'
 import Page from '../components/Page.js'
 import ChipRow from '../components/ChipRow.js'
@@ -8,9 +7,7 @@ import { useSubscriptions } from '../context/SubscriptionsContext.js'
 const REMINDER_OPTIONS = [3, 7, 14].map((x) => ({ key: x, label: `${x}일 전` }))
 
 export default function SettingsScreen() {
-  const { notify } = useSubscriptions()
-  const [on, setOn] = useState(true)
-  const [days, setDays] = useState(7)
+  const { notify, settings, updateSettings } = useSubscriptions()
 
   return (
     <Page eyebrow="앱 설정" title="알림 설정" sub="결제일을 놓치지 않게 앱에서 알려드려요">
@@ -19,14 +16,22 @@ export default function SettingsScreen() {
           <Text style={styles.sectionTitle}>결제일 알림</Text>
           <Text style={styles.sectionSub}>결제 예정 구독을 홈 화면에서 알려드려요</Text>
         </View>
-        <Switch value={on} onValueChange={setOn} trackColor={{ true: colors.accent }} />
+        <Switch
+          value={settings.billingAlertsEnabled}
+          onValueChange={(value) => updateSettings({ ...settings, billingAlertsEnabled: value })}
+          trackColor={{ true: colors.accent }}
+        />
       </View>
 
       <View style={styles.sectionVertical}>
         <Text style={styles.sectionTitle}>미리 알림</Text>
         <Text style={styles.sectionSub}>결제일 며칠 전에 확인할까요?</Text>
         <View style={{ marginTop: spacing.md }}>
-          <ChipRow options={REMINDER_OPTIONS} value={days} onChange={setDays} />
+          <ChipRow
+            options={REMINDER_OPTIONS}
+            value={settings.reminderDays}
+            onChange={(value) => updateSettings({ ...settings, reminderDays: value })}
+          />
         </View>
       </View>
 
