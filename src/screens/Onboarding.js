@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { View, Text, ScrollView, Pressable, StyleSheet, useWindowDimensions } from 'react-native'
+import { View, Text, ScrollView, TextInput, Pressable, StyleSheet, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { colors, spacing } from '../theme.js'
 
@@ -26,6 +26,9 @@ export default function OnboardingScreen({ onDone }) {
   const insets = useSafeAreaInsets()
   const scrollRef = useRef(null)
   const [page, setPage] = useState(0)
+  const [name, setName] = useState('')
+  const isLastPage = page === PAGES.length - 1
+  const canFinish = !isLastPage || name.trim().length > 0
 
   const handleScrollEnd = (e) => {
     const next = Math.round(e.nativeEvent.contentOffset.x / width)
@@ -33,11 +36,11 @@ export default function OnboardingScreen({ onDone }) {
   }
 
   const goNext = () => {
-    if (page < PAGES.length - 1) {
+    if (!isLastPage) {
       scrollRef.current?.scrollTo({ x: (page + 1) * width, animated: true })
       setPage(page + 1)
-    } else {
-      onDone()
+    } else if (name.trim().length > 0) {
+      onDone(name.trim())
     }
   }
 
@@ -49,12 +52,25 @@ export default function OnboardingScreen({ onDone }) {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={handleScrollEnd}
+        keyboardShouldPersistTaps="handled"
       >
         {PAGES.map((p, i) => (
           <View key={i} style={[styles.page, { width }]}>
             <Text style={styles.kicker}>{p.kicker}</Text>
             <Text style={styles.title}>{p.title}</Text>
             <Text style={styles.body}>{p.body}</Text>
+            {i === PAGES.length - 1 && (
+              <View style={styles.nameField}>
+                <Text style={styles.nameLabel}>어떻게 불러드릴까요?</Text>
+                <TextInput
+                  style={styles.nameInput}
+                  placeholder="이름 또는 별명"
+                  value={name}
+                  onChangeText={setName}
+                  returnKeyType="done"
+                />
+              </View>
+            )}
           </View>
         ))}
       </ScrollView>
@@ -64,8 +80,8 @@ export default function OnboardingScreen({ onDone }) {
             <View key={i} style={[styles.dot, i === page && styles.dotActive]} />
           ))}
         </View>
-        <Pressable style={styles.button} onPress={goNext}>
-          <Text style={styles.buttonText}>{page === PAGES.length - 1 ? '시작하기' : '다음'}</Text>
+        <Pressable style={[styles.button, !canFinish && styles.buttonDisabled]} onPress={goNext} disabled={!canFinish}>
+          <Text style={styles.buttonText}>{isLastPage ? '시작하기' : '다음'}</Text>
         </Pressable>
       </View>
     </View>
@@ -78,10 +94,14 @@ const styles = StyleSheet.create({
   kicker: { fontSize: 13, fontWeight: '700', color: colors.accent, marginBottom: spacing.sm },
   title: { fontSize: 26, fontWeight: '700', color: colors.ink, marginBottom: spacing.md },
   body: { fontSize: 15, color: colors.inkSecondary, lineHeight: 22 },
+  nameField: { marginTop: spacing.xl },
+  nameLabel: { fontSize: 13, fontWeight: '600', color: colors.ink, marginBottom: spacing.sm },
+  nameInput: { borderWidth: 1, borderColor: '#E4E4E7', borderRadius: 10, paddingVertical: spacing.md, paddingHorizontal: spacing.md, fontSize: 15, color: colors.ink, backgroundColor: colors.card },
   footer: { padding: spacing.xl, gap: spacing.lg },
   dots: { flexDirection: 'row', justifyContent: 'center', gap: spacing.sm },
   dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.border },
   dotActive: { backgroundColor: colors.accent, width: 20 },
   button: { backgroundColor: colors.accent, borderRadius: 10, paddingVertical: spacing.md, alignItems: 'center' },
+  buttonDisabled: { opacity: 0.5 },
   buttonText: { color: '#fff', fontWeight: '700', fontSize: 15 },
 })

@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { loadSubscriptions, saveSubscriptions, loadEvents, saveEvents, loadOnboarded, saveOnboarded } from './subscriptionStorage.js'
+import { loadSubscriptions, saveSubscriptions, loadEvents, saveEvents, loadOnboarded, saveOnboarded, loadUserName, saveUserName } from './subscriptionStorage.js'
 
 function fakeStorage() {
   const store = new Map()
@@ -60,4 +60,15 @@ test('saveOnboarded then loadOnboarded round-trips false', async () => {
   await saveOnboarded(storage, true)
   await saveOnboarded(storage, false)
   assert.strictEqual(await loadOnboarded(storage), false)
+})
+
+test('loadUserName returns an empty string when nothing is stored', async () => {
+  const storage = fakeStorage()
+  assert.strictEqual(await loadUserName(storage), '')
+})
+
+test('saveUserName then loadUserName round-trips the name', async () => {
+  const storage = fakeStorage()
+  await saveUserName(storage, '건호')
+  assert.strictEqual(await loadUserName(storage), '건호')
 })

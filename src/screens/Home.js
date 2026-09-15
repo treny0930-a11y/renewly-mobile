@@ -30,7 +30,7 @@ function Panel({ title, count, sub, onSeeAll, children }) {
 
 export default function HomeScreen() {
   const navigation = useNavigation()
-  const { items, summary } = useSubscriptions()
+  const { items, summary, userName } = useSubscriptions()
   const now = new Date()
   const need = items.filter((x) => needsAttention(x, now))
   const upcoming = [...items].sort((a, b) => a.billingDay - b.billingDay)
@@ -44,7 +44,7 @@ export default function HomeScreen() {
   return (
     <Page
       eyebrow={`${now.getFullYear()}년 ${now.getMonth() + 1}월`}
-      title="안녕하세요, 건호님 👋"
+      title={`안녕하세요, ${userName}님 👋`}
       sub="이번 달 구독 현황이에요"
       right={<Pressable style={styles.addButton} onPress={goAdd}><Text style={styles.addButtonText}>＋ 새 구독 등록</Text></Pressable>}
     >

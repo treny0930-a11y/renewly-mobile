@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getSavingsSummary, getUpcomingNotifications } from '../domain/subscription.js'
-import { loadSubscriptions, saveSubscriptions, loadEvents, saveEvents, loadOnboarded, saveOnboarded } from '../storage/subscriptionStorage.js'
+import { loadSubscriptions, saveSubscriptions, loadEvents, saveEvents, loadOnboarded, saveOnboarded, loadUserName, saveUserName } from '../storage/subscriptionStorage.js'
 import { copy } from '../utils/statusCopy.js'
 import { won } from '../utils/format.js'
 
@@ -18,15 +18,17 @@ export function SubscriptionsProvider({ children }) {
   const [items, setItems] = useState([])
   const [events, setEvents] = useState([])
   const [onboarded, setOnboarded] = useState(false)
+  const [userName, setUserName] = useState('')
   const [toast, setToast] = useState('')
 
   useEffect(() => {
     let cancelled = false
-    Promise.all([loadSubscriptions(AsyncStorage), loadEvents(AsyncStorage), loadOnboarded(AsyncStorage)]).then(([loadedItems, loadedEvents, loadedOnboarded]) => {
+    Promise.all([loadSubscriptions(AsyncStorage), loadEvents(AsyncStorage), loadOnboarded(AsyncStorage), loadUserName(AsyncStorage)]).then(([loadedItems, loadedEvents, loadedOnboarded, loadedUserName]) => {
       if (cancelled) return
       setItems(loadedItems)
       setEvents(loadedEvents)
       setOnboarded(loadedOnboarded)
+      setUserName(loadedUserName)
       setReady(true)
     })
     return () => { cancelled = true }
@@ -56,14 +58,16 @@ export function SubscriptionsProvider({ children }) {
     pushEvent({ type: 'billing-edit', text: `${item.name} 결제일을 ${billingDay}일로 바꿨어요`, sub: `${won(item.monthlyCost)} / 월` })
     notify(`${item.name} 결제일을 ${billingDay}일로 바꿨어요.`)
   }
-  const completeOnboarding = () => {
+  const completeOnboarding = (name) => {
     setOnboarded(true)
     saveOnboarded(AsyncStorage, true)
+    setUserName(name)
+    saveUserName(AsyncStorage, name)
   }
 
   const summary = useMemo(() => getSavingsSummary(items), [items])
   const notifGroups = useMemo(() => getUpcomingNotifications(items, events), [items, events])
 
-  const value = { ready, items, events, onboarded, summary, notifGroups, toast, add, update, remove, changeDecision, editBilling, notify, completeOnboarding }
+  const value = { ready, items, events, onboarded, userName, summary, notifGroups, toast, add, update, remove, changeDecision, editBilling, notify, completeOnboarding }
   return <SubscriptionsContext.Provider value={value}>{children}</SubscriptionsContext.Provider>
 }
